@@ -276,6 +276,124 @@ class MyTest(unittest.TestCase):
         print(actual_optionslist)
         # 断言
         self.assertListEqual(expect_optionslist, actual_optionslist)
+        def testMultipleOptions(self):
+        from selenium.webdriver.support.ui import Select
+        import time
+        self.driver.get(r'file:///C:/Users/v-xug/Desktop/multipleOptions.html')
+        select_element = Select(self.driver.find_element_by_xpath('//select'))
+        # 通过序号选择第一个元素
+        select_element.select_by_index(0)
+        # 通过文本选择山楂
+        select_element.select_by_visible_text('山楂')
+        # 通过选项的value属性值选择value=猕猴桃
+        select_element.select_by_value('nihoutao')
+        # 打印所有选中文本
+        for option in select_element.all_selected_options:
+            print(option.text)
+        # 再次选中3个选项
+        select_element.select_by_index(1)
+        select_element.select_by_value('juzi')
+        select_element.select_by_visible_text('荔枝')
+        # 取消3个选项
+        select_element.deselect_by_index(0)
+        select_element.deselect_by_value('nihoutao')
+        select_element.deselect_by_visible_text('山楂')
+    def testInputSelect(self):
+        self.driver.get(r'file:///C:/Users/v-xug/Desktop/inputselect.html')
+        from selenium.webdriver.common.keys import Keys
+        inputselect = self.driver.find_element_by_id('select')
+        inputselect.clear()
+        import time
+        time.sleep(1)
+        # 输入的同时按下箭头键
+        inputselect.send_keys('c', Keys.ARROW_DOWN)
+        time.sleep(1)
+        inputselect.send_keys(Keys.ARROW_DOWN)
+        time.sleep(1)
+        inputselect.send_keys(Keys.ENTER)
+        time.sleep(3)
+
+    def testRadio(self):
+        import time
+        self.driver.get(r'file:///C:/Users/v-xug/Desktop/radio.html')
+        # 定位到草莓选项
+        time.sleep(2)
+        berry = self.driver.find_element_by_xpath("//input[@value='berry']")
+        berry.click()
+        # 断言是否被选中
+        self.assertTrue(berry.is_selected())
+
+        if berry.is_selected():
+            # 如果被选中了重新选择西瓜选项
+            watermelon = self.driver.find_element_by_xpath("//input[@value='watermelon']")
+            watermelon.click()
+            # 断言草莓未被选中
+            self.assertFalse(berry.is_selected())
+            # 查找所有的选项
+            options = self.driver.find_elements_by_xpath("//input[@name='fruit']")
+            # 遍历所有的选项，如果找到orange且未被选中，那么就选中这项
+            for option in options:
+                if option.get_attribute('value')=='orange':
+                    if not option.is_selected():
+                        option.click()
+    def testCheckBox(self):
+        self.driver.get(r'file:///C:/Users/v-xug/Desktop/checkbox.html')
+        # 选中一个选项并取消
+        berry = self.driver.find_element_by_xpath("//input[@value='berry']")
+        berry.click()
+        # 断言是否被选中
+        self.assertTrue(berry.is_selected())
+        # 取消选中
+        if berry.is_selected():
+            berry.click()
+        # 遍历所有的选项并选中所有的选项
+        options = self.driver.find_elements_by_xpath("//input[@name='fruit']")
+        for option in options:
+            if not option.is_selected():
+                option.click()
+    def testAssertIn(self):
+        self.driver.get('http://www.baidu.com')
+        self.driver.find_element_by_id('kw').send_keys('linux超')
+        self.driver.find_element_by_id('su').click()
+        import time
+        time.sleep(4)
+        self.assertIn('linux超', self.driver.page_source, msg='页面源码中不存在该关键字')
+
+    def testScreenShot(self):
+        self.driver.get('http://www.baidu.com')
+        try:
+            # 使用get_screenshot_as_file(filename)方法，对浏览器当前打开的页面截图，并保存在当前目录下
+            self.driver.get_screenshot_as_file('baidu.png')
+        except IOError as e:
+            print(e)
+    def testDragDrop(self):
+        import time
+        self.driver.get(r'http://jqueryui.com/resources/demos/draggable/scroll.html')
+        element1 = self.driver.find_element_by_id('draggable')
+        element2 = self.driver.find_element_by_id('draggable2')
+        element3 = self.driver.find_element_by_id('draggable3')
+        from selenium.webdriver import ActionChains
+        action = ActionChains(self.driver)
+        # 把第一个元素拖拽到第二个元素的位置
+        action.drag_and_drop(element1, element2).perform()
+        # 把第三个元素拖拽10个像素，拖拽2次
+        for i in range(2):
+            action.drag_and_drop_by_offset(element3,10,10).perform()
+            time.sleep(2)
+        action.release()
+    def testSingleKey(self):
+        import time
+        self.driver.get('http://www.sogou.com')
+        query = self.driver.find_element_by_id('query')
+        # 导入模拟按键模块
+        from selenium.webdriver.common.keys import Keys
+        # 输入框发送一个f12按键
+        query.send_keys(Keys.F12)
+        time.sleep(2)
+        # 输入框中输入搜索内容并按下回车键
+        query.send_keys('selenium')
+        query.send_keys(Keys.ENTER)
+        time.sleep(2)
     def tearDown(self):
         # self.driver.quit()
         pass
