@@ -394,6 +394,7 @@ class MyTest(unittest.TestCase):
         query.send_keys('selenium')
         query.send_keys(Keys.ENTER)
         time.sleep(2)
+	# 2019.2.27 add by linux超
 	def testSimulationCombinationKeys(self):
         '''
         模拟组合按键
