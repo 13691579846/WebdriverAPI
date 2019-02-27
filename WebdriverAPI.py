@@ -276,7 +276,7 @@ class MyTest(unittest.TestCase):
         print(actual_optionslist)
         # 断言
         self.assertListEqual(expect_optionslist, actual_optionslist)
-        def testMultipleOptions(self):
+    def testMultipleOptions(self):
         from selenium.webdriver.support.ui import Select
         import time
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/multipleOptions.html')
@@ -394,6 +394,112 @@ class MyTest(unittest.TestCase):
         query.send_keys('selenium')
         query.send_keys(Keys.ENTER)
         time.sleep(2)
+	def testSimulationCombinationKeys(self):
+        '''
+        模拟组合按键
+        :return:
+        '''
+        from selenium.webdriver import ActionChains
+        from selenium.webdriver.common.keys import Keys
+        import time
+        url = 'http://www.baidu.com'
+        self.driver.get(url)
+        # 定位输入框
+        input = self.driver.find_element_by_id('kw')
+        input.send_keys('python')
+        time.sleep(2)
+        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys('a').key_up(Keys.CONTROL).perform()
+        time.sleep(2)
+        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys('c').key_up(Keys.CONTROL).perform()
+        time.sleep(2)
+        self.driver.refresh()
+        time.sleep(2)
+        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+        time.sleep(1)
+        self.driver.find_element_by_id('su').click()
+    def testSimulationLeftClickMouseOfprocess(self):
+        """
+        模拟鼠标左键按下与释放
+        鼠标左键点击百度首页的新闻（新闻左键点击不放会变为蓝色）
+        :return:
+        """
+        from selenium.webdriver import ActionChains
+        import time
+        url = 'http://www.baidu.com'
+        self.driver.get(url)
+        element = self.driver.find_element_by_link_text('新闻')
+        # 按下鼠标左键并保持
+        ActionChains(self.driver).click_and_hold(element).perform()
+        time.sleep(2)
+        #释放鼠标左键
+        ActionChains(self.driver).release(element).perform()
+        time.sleep(2)
+    def testMouseOnElement(self):
+        '''
+        鼠标悬停在某个元素上
+        :return:
+        '''
+        from selenium.webdriver import ActionChains
+        import time
+        url = 'http://www.baidu.com'
+        self.driver.get(url)
+        newInfo = self.driver.find_element_by_link_text('新闻')
+        hao123 = self.driver.find_element_by_link_text('hao123')
+        action = ActionChains(self.driver)
+        action.move_to_element(newInfo).perform()
+        time.sleep(2)
+        action.move_to_element(hao123).perform()
+    #判断元素是否存在
+    def isElementpresent(self,*element):
+        from selenium.common.exceptions import NoSuchElementException
+        try:
+            self.driver.find_element(*element)
+        except NoSuchElementException as e:
+            print(e)
+            return False
+        else:
+            return True
+    def testIselementPresent(self):
+        url = 'http://www.sogou.com'
+        element = ('id', 'query')
+        self.driver.get(url)
+        ret = self.isElementpresent(*element)
+        if ret is True:
+            print('元素存在')
+        else:
+            print('元素不存在')
+    #通过title属性识别和操作新弹出窗口的浏览器窗口
+    def testTitleWindow(self):
+        from selenium.common.exceptions import NoSuchElementException, TimeoutException
+        import time
+        url = 'file:///C:/Users/v-xug/Desktop/titleWindow.html'
+        self.driver.get(url)
+        sogou = self.driver.find_element_by_link_text('sogou 搜索')
+        sogou.click()
+        time.sleep(3)
+        # 获取所有的窗口句柄
+        all_handles = self.driver.window_handles
+        # 打印当前窗口的句柄
+        # print(self.driver.current_window_handle)
+        print(len(all_handles))
+        if len(all_handles) > 0:
+            try:
+                # 遍历每一个窗口
+                for windowhandl in all_handles:
+                    self.driver.switch_to.window(windowhandl)
+                    # 每一个窗口的标题
+                    print('窗口',self.driver.title)
+                    if self.driver.title == '搜狗搜索引擎 - 上网从搜狗开始':
+                        inputBox = self.driver.find_element_by_id('query')
+                        inputBox.send_keys('python')
+                    time.sleep(2)
+            except NoSuchElementException as e:
+                print(e)
+            except TimeoutException as e:
+                print(e)
+        self.driver.switch_to.window(all_handles[0])
+        print(self.driver.title)
+        self.assertEqual(self.driver.title, '使用title属性识别和操作新弹出的浏览器窗口')
     def tearDown(self):
         # self.driver.quit()
         pass
