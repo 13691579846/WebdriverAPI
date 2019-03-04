@@ -613,7 +613,8 @@ class MyTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    suite.addTest(MyTest('testSelectOption'))
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    # suite = unittest.TestSuite()
+    # suite.addTest(MyTest('testMultipleOptions'))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
+    unittest.main()
