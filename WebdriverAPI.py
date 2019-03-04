@@ -1,6 +1,8 @@
 from selenium import webdriver
 import unittest
-
+'''
+常用webdriver Api 详解（基础部分）
+'''
 class MyTest(unittest.TestCase):
 
     def setUp(self):
@@ -124,7 +126,7 @@ class MyTest(unittest.TestCase):
                 sendKeys.clear()
                 sendKeys.send_keys('python')
     def testGetElementInfo(self):
-
+		
         baseBaiduUrl = 'https://www.baidu.com/'
         self.driver.get(baseBaiduUrl)
         self.driver.maximize_window()
@@ -156,6 +158,9 @@ class MyTest(unittest.TestCase):
         time.sleep(5)
         element.clear() # 清空输入框
     def testElementIsDisplay(self):
+		'''
+		判断元素是否可见
+		'''
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/isdisplay.html')
         # 找到div2元素
         div2 = self.driver.find_element_by_id('div2')
@@ -188,6 +193,9 @@ class MyTest(unittest.TestCase):
         else:
             print('div4 元素不可见')
     def testElementIsEnable(self):
+		'''
+		判断元素是否可操作
+		'''
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/isenable.html')
         input1 = self.driver.find_element_by_id('input1')
         if input1.is_enabled():
@@ -206,12 +214,18 @@ class MyTest(unittest.TestCase):
             print('input3 不可操作')
 
     def testGetAttribute(self):
+		'''
+		获取元素属性值
+		'''
         self.driver.get('http://www.sogou.com')
         query = self.driver.find_element_by_id('query')
         print(query.get_attribute('name'))
         query.send_keys('python')
         print(query.get_attribute('value'))
     def testDoubleClick(self):
+		'''
+		模拟鼠标双击事件
+		'''
         from selenium.webdriver import ActionChains # 模拟鼠标操作事件包
         import time
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/doubleclick.html')
@@ -224,6 +238,9 @@ class MyTest(unittest.TestCase):
         time.sleep(3)
     # 遍历下拉列表，获取下拉列表元素的所有显示值和value属性值
     def testSelect(self):
+		'''
+		操作select下拉列表元素
+		'''
         import time
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/actionselect.html')
         # 查找下拉列表元素
@@ -360,6 +377,9 @@ class MyTest(unittest.TestCase):
         self.assertIn('linux超', self.driver.page_source, msg='页面源码中不存在该关键字')
 
     def testScreenShot(self):
+		'''
+		页面截图操作
+		'''
         self.driver.get('http://www.baidu.com')
         try:
             # 使用get_screenshot_as_file(filename)方法，对浏览器当前打开的页面截图，并保存在当前目录下
@@ -367,6 +387,9 @@ class MyTest(unittest.TestCase):
         except IOError as e:
             print(e)
     def testDragDrop(self):
+		'''
+		模拟鼠标拖拽
+		'''
         import time
         self.driver.get(r'http://jqueryui.com/resources/demos/draggable/scroll.html')
         element1 = self.driver.find_element_by_id('draggable')
@@ -501,6 +524,89 @@ class MyTest(unittest.TestCase):
         self.driver.switch_to.window(all_handles[0])
         print(self.driver.title)
         self.assertEqual(self.driver.title, '使用title属性识别和操作新弹出的浏览器窗口')
+	def testHandleFrame(self):
+        '''
+        操作frame中的页面元素
+        :return:
+        '''
+        from selenium.webdriver.support import expected_conditions as EC
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.common.exceptions import TimeoutException
+
+        self.driver.get(r'file:///C:/Users/v-xug/Desktop/frameset.html')
+        self.driver.switch_to.frame(0) # 切换到第一个frame中
+        left_ele_text = self.driver.find_element_by_xpath('//p')
+        leftText = left_ele_text.text
+        self.assertEqual(leftText, '这是左侧frame页面上的文字')
+        button = self.driver.find_element_by_tag_name('input')
+        button.click()
+        try:
+            alert = WebDriverWait(self.driver, 10).until(EC.alert_is_present())
+            print(alert.text)
+            alert.accept()
+        except TimeoutException as e:
+            print(e)
+        self.driver.switch_to.default_content() # 跳到默认的frame
+        self.driver.switch_to.frame(1) # 跳到第二个frame中
+        middle_ele = self.driver.find_element_by_xpath('//p')
+        print(middle_ele.text)
+        middle_input = self.driver.find_element_by_tag_name('input')
+        middle_input.send_keys('python')
+        self.assertEqual(middle_ele.text, '这是中间frame页面上的文字')
+
+        self.driver.switch_to.default_content()
+
+    def testHandleCookie(self):
+        '''
+        操作页面的cookie信息
+        :return:
+        '''
+        self.driver.get('https://www.sogou.com/')
+        # 获取当前页面的所有cookie信息
+        cookies = self.driver.get_cookies()
+        for cookie in cookies:
+            print('%s->%s->%s->%s->%s'%(cookie['domain'],cookie['name'], cookie['value'],cookie['expiry'],cookie['path']))
+        # 获取name为suv的cookie信息
+        ck = self.driver.get_cookie('SUV')
+        print('%s->%s->%s->%s->%s' % (
+        ck['domain'], ck['name'], ck['value'], ck['expiry'], ck['path']))
+
+        # 删除name为abtest的cookie信息
+        print(self.driver.delete_cookie('ABTEST'))
+        # 删除所有的cookie信息
+        self.driver.delete_all_cookies()
+        print(self.driver.get_cookies())
+
+        # 添加自定义cookie信息
+        self.driver.add_cookie({'name':'gloryroadTrain','value':'1479697159269020'})
+        # 查看cookie信息
+        print(self.driver.get_cookie('gloryroadTrain'))
+    def testSetLoadPageTimeOut(self):
+        '''
+        指定页面加载时间
+        :return:
+        '''
+        import time
+        from selenium.common.exceptions import TimeoutException
+        from selenium.webdriver.common.keys import Keys
+        self.driver.set_page_load_timeout(10)
+        try:
+            starttime = time.time()
+            self.driver.get('https://mail.126.com')
+        except TimeoutException:
+            print('页面加载超时')
+            self.driver.execute_script('window.stop()')
+
+        end = time.time() - starttime
+        print(end)
+        self.driver.switch_to.frame(self.driver.find_element_by_xpath("//div[@id='loginDiv']/iframe"))
+        time.sleep(2)
+        username = self.driver.find_element_by_xpath("//input[@name='email']")
+        username.send_keys('281754043')
+        time.sleep(2)
+        password = self.driver.find_element_by_xpath("//input[@name='password']")
+        password.send_keys('xiaochao11520')
+        password.send_keys(Keys.ENTER)
     def tearDown(self):
         # self.driver.quit()
         pass
