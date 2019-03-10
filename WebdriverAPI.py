@@ -1,7 +1,7 @@
 from selenium import webdriver
 import unittest
 '''
-常用webdriver Api 详解（基础部分）
+常用webdriverApi 详解（基础部分）
 '''
 class MyTest(unittest.TestCase):
 
@@ -20,7 +20,7 @@ class MyTest(unittest.TestCase):
         self.driver.get(baseUrl)
         currTitle = self.driver.title # 获取当前页面的标题
         self.assertIn(baseTitle, currTitle, msg='页面跳转失败')
-
+	"""
     def testBackForwardRefresh(self):
         '''
         前进，后退，刷新当前页面
@@ -607,6 +607,7 @@ class MyTest(unittest.TestCase):
         password = self.driver.find_element_by_xpath("//input[@name='password']")
         password.send_keys('xiaochao11520')
         password.send_keys(Keys.ENTER)
+		"""
     def tearDown(self):
         # self.driver.quit()
         pass
