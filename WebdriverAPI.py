@@ -1,7 +1,7 @@
 from selenium import webdriver
 import unittest
 '''
-常用webdriver Api 详解（基础部分）
+常用webdriverApi 详解（基础部分）
 '''
 class MyTest(unittest.TestCase):
 
@@ -20,7 +20,7 @@ class MyTest(unittest.TestCase):
         self.driver.get(baseUrl)
         currTitle = self.driver.title # 获取当前页面的标题
         self.assertIn(baseTitle, currTitle, msg='页面跳转失败')
-
+	"""
     def testBackForwardRefresh(self):
         '''
         前进，后退，刷新当前页面
@@ -126,7 +126,7 @@ class MyTest(unittest.TestCase):
                 sendKeys.clear()
                 sendKeys.send_keys('python')
     def testGetElementInfo(self):
-
+		
         baseBaiduUrl = 'https://www.baidu.com/'
         self.driver.get(baseBaiduUrl)
         self.driver.maximize_window()
@@ -158,10 +158,9 @@ class MyTest(unittest.TestCase):
         time.sleep(5)
         element.clear() # 清空输入框
     def testElementIsDisplay(self):
-        '''
-        判断元素是否可见
-        :return:
-        '''
+		'''
+		判断元素是否可见
+		'''
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/isdisplay.html')
         # 找到div2元素
         div2 = self.driver.find_element_by_id('div2')
@@ -194,10 +193,9 @@ class MyTest(unittest.TestCase):
         else:
             print('div4 元素不可见')
     def testElementIsEnable(self):
-        '''
-        判断元素是否可操作
-        :return:
-        '''
+		'''
+		判断元素是否可操作
+		'''
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/isenable.html')
         input1 = self.driver.find_element_by_id('input1')
         if input1.is_enabled():
@@ -216,22 +214,18 @@ class MyTest(unittest.TestCase):
             print('input3 不可操作')
 
     def testGetAttribute(self):
-        '''
-        获取元素属性值
-        :param self:
-        :return:
-        '''
+		'''
+		获取元素属性值
+		'''
         self.driver.get('http://www.sogou.com')
         query = self.driver.find_element_by_id('query')
         print(query.get_attribute('name'))
         query.send_keys('python')
         print(query.get_attribute('value'))
     def testDoubleClick(self):
-        '''
-        模拟鼠标双击事件
-        :param self:
-        :return:
-        '''
+		'''
+		模拟鼠标双击事件
+		'''
         from selenium.webdriver import ActionChains # 模拟鼠标操作事件包
         import time
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/doubleclick.html')
@@ -244,10 +238,9 @@ class MyTest(unittest.TestCase):
         time.sleep(3)
     # 遍历下拉列表，获取下拉列表元素的所有显示值和value属性值
     def testSelect(self):
-        '''
-        操作select下拉列表元素
-        :return:
-        '''
+		'''
+		操作select下拉列表元素
+		'''
         import time
         self.driver.get(r'file:///C:/Users/v-xug/Desktop/actionselect.html')
         # 查找下拉列表元素
@@ -384,10 +377,9 @@ class MyTest(unittest.TestCase):
         self.assertIn('linux超', self.driver.page_source, msg='页面源码中不存在该关键字')
 
     def testScreenShot(self):
-        '''
-        页面截图操作
-        :return:
-        '''
+		'''
+		页面截图操作
+		'''
         self.driver.get('http://www.baidu.com')
         try:
             # 使用get_screenshot_as_file(filename)方法，对浏览器当前打开的页面截图，并保存在当前目录下
@@ -395,10 +387,9 @@ class MyTest(unittest.TestCase):
         except IOError as e:
             print(e)
     def testDragDrop(self):
-        '''
-        模拟鼠标拖拽
-        :return:
-        '''
+		'''
+		模拟鼠标拖拽
+		'''
         import time
         self.driver.get(r'http://jqueryui.com/resources/demos/draggable/scroll.html')
         element1 = self.driver.find_element_by_id('draggable')
@@ -426,8 +417,8 @@ class MyTest(unittest.TestCase):
         query.send_keys('selenium')
         query.send_keys(Keys.ENTER)
         time.sleep(2)
-    # 2019.2.27 add by linux超
-    def testSimulationCombinationKeys(self):
+	# 2019.2.27 add by linux超
+	def testSimulationCombinationKeys(self):
         '''
         模拟组合按键
         :return:
@@ -533,7 +524,7 @@ class MyTest(unittest.TestCase):
         self.driver.switch_to.window(all_handles[0])
         print(self.driver.title)
         self.assertEqual(self.driver.title, '使用title属性识别和操作新弹出的浏览器窗口')
-    def testHandleFrame(self):
+	def testHandleFrame(self):
         '''
         操作frame中的页面元素
         :return:
@@ -616,6 +607,7 @@ class MyTest(unittest.TestCase):
         password = self.driver.find_element_by_xpath("//input[@name='password']")
         password.send_keys('xiaochao11520')
         password.send_keys(Keys.ENTER)
+		"""
     def tearDown(self):
         # self.driver.quit()
         pass
