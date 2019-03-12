@@ -9,7 +9,7 @@ class MyTest(unittest.TestCase):
         self.driver = webdriver.Firefox()
 
     #1.访问具体地址2.获取当前页面url3.获取当前页面title
-
+    """
     def testOpenBaiduUrl(self):
         '''
         1.访问具体地址
@@ -447,12 +447,13 @@ class MyTest(unittest.TestCase):
         ActionChains(self.driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
         time.sleep(1)
         self.driver.find_element_by_id('su').click()
+    
     def testSimulationLeftClickMouseOfprocess(self):
-        """
+        '''
         模拟鼠标左键按下与释放
         鼠标左键点击百度首页的新闻（新闻左键点击不放会变为蓝色）
         :return:
-        """
+        '''
         from selenium.webdriver import ActionChains
         import time
         url = 'http://www.baidu.com'
@@ -613,7 +614,24 @@ class MyTest(unittest.TestCase):
         password = self.driver.find_element_by_xpath("//input[@name='password']")
         password.send_keys('xiaochao11520')
         password.send_keys(Keys.ENTER)
+    """
+    def test_AjaxBykeys(self):
+        '''
+        在ajax方式产生的悬浮框中，单击选择包含某个关键字的选项
+        :return:
+        '''
+        from selenium.webdriver.common.keys import Keys
+        import time
 
+        self.driver.get('https://www.sogou.com')
+        query = self.driver.find_element_by_xpath("//input[@id='query']")
+        query.send_keys('python')
+        time.sleep(2)
+        # 向下选择第三个选项
+        for i in range(3):
+            query.send_keys(Keys.DOWN)
+            time.sleep(1)
+        query.send_keys(Keys.ENTER)
     def tearDown(self):
         # self.driver.quit()
         pass
