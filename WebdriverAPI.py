@@ -614,7 +614,7 @@ class MyTest(unittest.TestCase):
         password = self.driver.find_element_by_xpath("//input[@name='password']")
         password.send_keys('xiaochao11520')
         password.send_keys(Keys.ENTER)
-    """
+    
     def test_AjaxBykeys(self):
         '''
         在ajax方式产生的悬浮框中，单击选择包含某个关键字的选项
@@ -632,6 +632,27 @@ class MyTest(unittest.TestCase):
             query.send_keys(Keys.DOWN)
             time.sleep(1)
         query.send_keys(Keys.ENTER)
+    
+    def test_killWindowProcess(self):
+        import os
+        self.driver.get('http://www.baidu.com')
+        recode = os.system('taskkill /iM firefox.exe /F') # 会结束所有一打开的浏览器的进程
+        if recode == 0:
+            print('结束firefox进程成功')
+        else:
+            print('结束浏览器进程失败')
+    
+    # 上传文件操作1
+    def test_uploadfile(self):
+        import time
+        self.driver.get('file:///C:/Users/v-xug/Desktop/fileupload.html')
+        upload = self.driver.find_element_by_id('file')
+        upload.send_keys(r'D:\mygithub\WebdriverAPI\test.py')
+        time.sleep(5)
+        submit = self.driver.find_element_by_id('filesubmit')
+        submit.click()
+    # 使用第三方工具autoit上传文件(网上资料很多，不再叙述)
+    """
     def tearDown(self):
         # self.driver.quit()
         pass
