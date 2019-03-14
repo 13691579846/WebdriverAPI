@@ -3,6 +3,9 @@ import configparser
 import os
 from selenium import webdriver
 class getElement():
+    '''
+    从配置文件中来获取定位信息
+    '''
     def __init__(self):
         self.elementIni = os.path.dirname(os.path.abspath(__file__))\
                           +r'\WebElement.ini'

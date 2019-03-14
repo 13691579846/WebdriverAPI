@@ -1,7 +1,6 @@
 from selenium import webdriver
 import unittest
 import time
-# sys.path.append(r'D:\mygithub\WebdriverAPI')
 from programDataSeparate.GetElement import getElement
 class sogouTc(unittest.TestCase):
 

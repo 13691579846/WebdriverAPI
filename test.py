@@ -16,5 +16,19 @@
 #     if ele.text =='行政管理':
 #         time.sleep(1)
 #         ele.click()
-import sys
-print(sys.getdefaultencoding())
+# import sys
+# print(sys.getdefaultencoding())
+from selenium import webdriver
+import unittest
+class demo(unittest.TestCase):
+
+    def setUp(self):
+        self.a ='ss'
+    def test_01(self):
+        self.a = input('>>>')
+        return self.a
+    def test_02(self):
+        print(self.test_01())
+
+if __name__=='__main__':
+    unittest.main()

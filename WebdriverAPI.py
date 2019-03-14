@@ -642,7 +642,7 @@ class MyTest(unittest.TestCase):
         else:
             print('结束浏览器进程失败')
     
-    # 上传文件操作1
+    # 上传文件操作
     def test_uploadfile(self):
         import time
         self.driver.get('file:///C:/Users/v-xug/Desktop/fileupload.html')
@@ -652,7 +652,120 @@ class MyTest(unittest.TestCase):
         submit = self.driver.find_element_by_id('filesubmit')
         submit.click()
     # 使用第三方工具autoit上传文件(网上资料很多，不再叙述)
+    
+    # 操作夫文本框实例1
+    def test_SohuSendMail_1(self):
+        import time
+        import traceback
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        from selenium.common.exceptions import TimeoutException, NoSuchWindowException
+        from selenium.webdriver.common.by import By
+        url = 'http://mail.sohu.com'
+        self.driver.get(url)
+        time.sleep(2)
+        try:
+            username = self.driver.find_element_by_xpath("//input[@placeholder='请输入您的邮箱']")
+            username.send_keys('13691579846@sohu.com')
+            password = self.driver.find_element_by_xpath("//input[@placeholder='请输入您的密码']")
+            password.send_keys('xiaochao11520')
+            commitBtn = self.driver.find_element_by_xpath("//input[@type='submit']")
+            commitBtn.click()
+            # 显示等待，确保登录成功且跳转到成功后的页面
+            wait = WebDriverWait(self.driver, 5)
+            wait.until(EC.element_to_be_clickable((By.XPATH,"//li[text()='写邮件']")))
+
+            writeMail = self.driver.find_element_by_xpath("//li[text()='写邮件']")
+            writeMail.click()
+
+            time.sleep(2)
+            revicer = self.driver.find_element_by_xpath("//div[@arr='mail.to_render']//input")
+            revicer.send_keys('281754043@qq.com')
+
+            subject = self.driver.find_element_by_xpath("//input[@ng-model='mail.subject']")
+            subject.send_keys('测试邮件')
+
+            ifram = self.driver.find_element_by_xpath("//iframe[contains(@id,'ueditor_0')]")
+            self.driver.switch_to.frame(ifram)
+
+            text = self.driver.find_element_by_xpath("/html/body")
+            text.send_keys('邮件正文')
+            time.sleep(2)
+            self.driver.switch_to.default_content()
+            send = self.driver.find_element_by_xpath("//span[text()='发送']")
+            send.click()
+
+            # 显示等待发送成功的字样出现
+            wait.until(EC.visibility_of_element_located((By.XPATH,"//span[. ='发送成功']")))
+            result = self.driver.find_element_by_xpath("//span[. ='发送成功']").text
+            self.assertEqual('发送成功', result)
+        except TimeoutException as e:
+            print('登录超时')
+            raise
+        except NoSuchWindowException as e:
+            # print('页面元素不存在', traceback.print_exc())
+            raise e
+        except Exception as e:
+            # print(traceback.print_exc())
+            raise e
     """
+    # 操作夫文本框实例2 通过js发送正文
+    def test_SohuSendMail_2(self):
+        import time
+        import traceback
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        from selenium.common.exceptions import TimeoutException, NoSuchWindowException
+        from selenium.webdriver.common.by import By
+        url = 'http://mail.sohu.com'
+        self.driver.get(url)
+        time.sleep(2)
+        try:
+            username = self.driver.find_element_by_xpath("//input[@placeholder='请输入您的邮箱']")
+            username.send_keys('13691579846@sohu.com')
+            password = self.driver.find_element_by_xpath("//input[@placeholder='请输入您的密码']")
+            password.send_keys('xiaochao11520')
+            commitBtn = self.driver.find_element_by_xpath("//input[@type='submit']")
+            commitBtn.click()
+            # 显示等待，确保登录成功且跳转到成功后的页面
+            wait = WebDriverWait(self.driver, 5)
+            wait.until(EC.element_to_be_clickable((By.XPATH, "//li[text()='写邮件']")))
+
+            writeMail = self.driver.find_element_by_xpath("//li[text()='写邮件']")
+            writeMail.click()
+
+            time.sleep(2)
+            revicer = self.driver.find_element_by_xpath("//div[@arr='mail.to_render']//input")
+            revicer.send_keys('281754043@qq.com')
+
+            subject = self.driver.find_element_by_xpath("//input[@ng-model='mail.subject']")
+            subject.send_keys('测试邮件')
+
+            ifram = self.driver.find_element_by_xpath("//iframe[contains(@id,'ueditor_0')]")
+            self.driver.switch_to.frame(ifram)
+
+            self.driver.execute_script("document.getElementsByTagName('body')[0].innerHTML='<b>邮件正文内容<b>;'")
+            # text = self.driver.find_element_by_xpath("/html/body")
+            # text.send_keys('邮件正文')
+            time.sleep(2)
+            self.driver.switch_to.default_content()
+            send = self.driver.find_element_by_xpath("//span[text()='发送']")
+            send.click()
+
+            # 显示等待发送成功的字样出现
+            wait.until(EC.visibility_of_element_located((By.XPATH, "//span[. ='发送成功']")))
+            result = self.driver.find_element_by_xpath("//span[. ='发送成功']").text
+            self.assertEqual('发送成功', result)
+        except TimeoutException as e:
+            raise
+        except NoSuchWindowException as e:
+            # print('页面元素不存在', traceback.print_exc())
+            raise e
+        except Exception as e:
+            # print(traceback.print_exc())
+            raise e
+
+
     def tearDown(self):
         # self.driver.quit()
         pass
