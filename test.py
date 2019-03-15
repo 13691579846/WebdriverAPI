@@ -18,17 +18,8 @@
 #         ele.click()
 # import sys
 # print(sys.getdefaultencoding())
-from selenium import webdriver
-import unittest
-class demo(unittest.TestCase):
+# value = [['13691579846@sohu.com', 'xiaochao11520'],['13691579844@sohu.com', 'xiaochao11520']]
+value =  [{'uname':'13691579846@sohu.com', 'password':'xiaochao11520'}, {'uname':'13691579844@sohu.com', 'password':'xiaochao11520'}]
+print(*value)
+print(value[0]['uname'])
 
-    def setUp(self):
-        self.a ='ss'
-    def test_01(self):
-        self.a = input('>>>')
-        return self.a
-    def test_02(self):
-        print(self.test_01())
-
-if __name__=='__main__':
-    unittest.main()
