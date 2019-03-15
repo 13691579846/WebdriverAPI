@@ -8,7 +8,7 @@ from selenium.common.exceptions import NoSuchWindowException
 '''
 @ddt
 class ddtTest(unittest.TestCase):
-    # 数据 可以是元祖， 列表， 字典
+    # 数据 可以是元祖， 列表， 字典（可迭代对象）
     value = [['13691579846@sohu.com', 'xiaochao11520','https://mail.sohu.com/fe/#/homepage'],
              ['13691579844@sohu.com', 'xiaochao11520','https://mail.sohu.com/fe/#/homepage']]
     # value = [{'uname':'13691579846@sohu.com', 'password':'xiaochao11520','expected':'https://mail.sohu.com/fe/#/homepage'},
@@ -18,8 +18,8 @@ class ddtTest(unittest.TestCase):
         self.driver = webdriver.Firefox()
         self.driver.get(self.testUrl)
 
-    @data(*value) # * 用例解释数据
-    @unpack# 用来解包， 将每组数据的第一个数据传递给uname依次类推， 当数据为字段时，形参需和字段的key值相同
+    @data(*value) # * 解析数据
+    @unpack# 用来解包， 将每组数据的第一个数据传递给uname依次类推， 当数据为字典时，形参需和字段的key值相同
     def test_case1(self, uname, password, expected):
         try:
             username = self.driver.find_element_by_xpath("//input[@placeholder='请输入您的邮箱']")

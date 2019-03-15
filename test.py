@@ -23,3 +23,4 @@ value =  [{'uname':'13691579846@sohu.com', 'password':'xiaochao11520'}, {'uname'
 print(*value)
 print(value[0]['uname'])
 
+
