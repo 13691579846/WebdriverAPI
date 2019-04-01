@@ -10,9 +10,4 @@
         <password>xiaochao11520</password>
         <expected>https://mail.sohu.com/fe/#/homepage</expected>
     </book>
-    <!--<book>-->
-        <!--<uname>搜索式软件测试</uname>-->
-        <!--<author>惠特克</author>-->
-        <!--<city>广州</city>-->
-    <!--</book>-->
 </bookList>
